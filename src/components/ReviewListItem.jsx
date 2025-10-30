@@ -1,7 +1,7 @@
 import styles from "./ReviewListItem.module.css";
 
-function ReviewListItem({ item }) {
-  const dateString = new Date(item.create).toLocaleDateString();
+function ReviewListItem({ item, onDelete }) {
+  const dateString = new Date(item.createdAt).toLocaleDateString();
 
   return (
     <div className={styles.item}>
@@ -11,6 +11,7 @@ function ReviewListItem({ item }) {
         <p>{item.rating}</p>
         <p>{dateString}</p>
         <p>{item.content}</p>
+        <button onClick={() => onDelete(item.id)}>삭제</button>
       </div>
     </div>
   );
