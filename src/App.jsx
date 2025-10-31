@@ -2,6 +2,7 @@ import { useState } from "react";
 import ReviewList from "./components/ReviewList";
 import mockData from "./mock.json";
 import Modal from "./components/Modal";
+import CreateReviewForm from "./components/CreateReviewForm";
 
 function App() {
   const [items, setItem] = useState(mockData);
@@ -24,7 +25,8 @@ function App() {
           isOpen={isCreateReviewOpen}
           onClose={() => setIsCreateReviewOpen(false)}
         >
-          생성 모달
+          <h2>리뷰 생성</h2>
+          <CreateReviewForm />
         </Modal>
       </div>
       <ReviewList items={sortedItem} onDelete={handleDelete} />
