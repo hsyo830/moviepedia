@@ -1,11 +1,22 @@
+import { useEffect, useRef } from "react";
+
 function CreateReviewForm({ onSubmit }) {
+  const inputRef = useRef(null);
+
   const submit = (FormData) => {
     const data = Object.fromEntries(FormData.entries());
     onSubmit(data);
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <form action={submit}>
-      <input name="title" placeholder="제목을 입력하세요." />
+      <input name="title" placeholder="제목을 입력하세요." ref={inputRef} />
       <select name="rating">
         <option value={1}>★</option>
         <option value={2}>★★</option>
