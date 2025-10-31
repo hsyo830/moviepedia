@@ -1,7 +1,7 @@
-function CreateReviewForm() {
+function CreateReviewForm({ onSubmit }) {
   const submit = (FormData) => {
     const data = Object.fromEntries(FormData.entries());
-    console.log(data);
+    onSubmit(data);
   };
   return (
     <form action={submit}>

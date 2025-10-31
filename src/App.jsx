@@ -15,6 +15,19 @@ function App() {
     const nextItems = items.filter((item) => item.id !== id);
     setItem(nextItems);
   };
+
+  const handleCreate = (data) => {
+    const now = new Date();
+    const newItem = {
+      id: items.length + 1,
+      ...data,
+      createdAt: now.valueOf(),
+      updatedAt: now.valueOf(),
+    };
+    setItem([newItem, ...items]);
+    setIsCreateReviewOpen(false);
+  };
+
   return (
     <>
       <div>
@@ -26,7 +39,7 @@ function App() {
           onClose={() => setIsCreateReviewOpen(false)}
         >
           <h2>리뷰 생성</h2>
-          <CreateReviewForm />
+          <CreateReviewForm onSubmit={handleCreate} />
         </Modal>
       </div>
       <ReviewList items={sortedItem} onDelete={handleDelete} />
