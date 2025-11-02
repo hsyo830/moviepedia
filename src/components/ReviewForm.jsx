@@ -1,6 +1,14 @@
 import { useEffect, useRef } from "react";
 
-function CreateReviewForm({ onSubmit }) {
+function ReviewForm({
+  review = {
+    title: "",
+    imgUrl: "",
+    rating: 1,
+    content: "",
+  },
+  onSubmit,
+}) {
   const inputRef = useRef(null);
 
   const submit = (FormData) => {
@@ -16,18 +24,27 @@ function CreateReviewForm({ onSubmit }) {
 
   return (
     <form action={submit}>
-      <input name="title" placeholder="제목을 입력하세요." ref={inputRef} />
-      <select name="rating">
+      <input
+        name="title"
+        placeholder="제목을 입력하세요."
+        ref={inputRef}
+        defaultValue={review.title}
+      />
+      <select name="rating" defaultValue={review.rating}>
         <option value={1}>★</option>
         <option value={2}>★★</option>
         <option value={3}>★★★</option>
         <option value={4}>★★★★</option>
         <option value={5}>★★★★★</option>
       </select>
-      <textarea name="content" placeholder="내용을 입력하세요." />
+      <textarea
+        name="content"
+        placeholder="내용을 입력하세요."
+        defaultValue={review.content}
+      />
       <button>작성완료</button>
     </form>
   );
 }
 
-export default CreateReviewForm;
+export default ReviewForm;

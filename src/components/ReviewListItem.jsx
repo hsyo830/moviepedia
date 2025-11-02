@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "./Modal";
 import styles from "./ReviewListItem.module.css";
-import EditReviewForm from "./EditReviewForm";
+import ReviewForm from "./ReviewForm";
 
 function ReviewListItem({ item, onUpdate, onDelete }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState();
@@ -25,7 +25,7 @@ function ReviewListItem({ item, onUpdate, onDelete }) {
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
         >
-          <EditReviewForm review={item} onSubmit={handleEditFormSubmit} />
+          <ReviewForm review={item} onSubmit={handleEditFormSubmit} />
         </Modal>
         <button onClick={() => onDelete(item.id)}>삭제</button>
       </div>

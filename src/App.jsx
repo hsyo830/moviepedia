@@ -2,7 +2,7 @@ import { useState } from "react";
 import ReviewList from "./components/ReviewList";
 import mockData from "./mock.json";
 import Modal from "./components/Modal";
-import CreateReviewForm from "./components/CreateReviewForm";
+import ReviewForm from "./components/ReviewForm";
 
 function App() {
   const [items, setItem] = useState(mockData);
@@ -55,7 +55,7 @@ function App() {
           onClose={() => setIsCreateReviewOpen(false)}
         >
           <h2>리뷰 생성</h2>
-          <CreateReviewForm onSubmit={handleCreate} />
+          <ReviewForm onSubmit={handleCreate} />
         </Modal>
       </div>
       <ReviewList
