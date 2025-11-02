@@ -1,10 +1,16 @@
 import { useState } from "react";
 import Modal from "./Modal";
 import styles from "./ReviewListItem.module.css";
+import EditReviewForm from "./EditReviewForm";
 
-function ReviewListItem({ item, onDelete }) {
+function ReviewListItem({ item, onUpdate, onDelete }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState();
   const dateString = new Date(item.createdAt).toLocaleDateString();
+
+  const handleEditFormSubmit = (data) => {
+    onUpdate(item.id, data);
+    setIsEditModalOpen(false);
+  };
 
   return (
     <div className={styles.item}>
@@ -19,7 +25,7 @@ function ReviewListItem({ item, onDelete }) {
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
         >
-          수정 모달
+          <EditReviewForm review={item} onSubmit={handleEditFormSubmit} />
         </Modal>
         <button onClick={() => onDelete(item.id)}>삭제</button>
       </div>

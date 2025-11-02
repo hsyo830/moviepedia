@@ -28,6 +28,22 @@ function App() {
     setIsCreateReviewOpen(false);
   };
 
+  const handleUpdate = (id, data) => {
+    const index = items.findIndex((item) => item.id === id);
+    const now = new Date();
+    const newItem = {
+      ...items[index],
+      ...data,
+      updatedAt: now.valueOf(),
+    };
+    const newItems = [
+      ...items.slice(0, index),
+      newItem,
+      ...items.slice(index + 1),
+    ];
+    setItem(newItems);
+  };
+
   return (
     <>
       <div>
@@ -42,7 +58,11 @@ function App() {
           <CreateReviewForm onSubmit={handleCreate} />
         </Modal>
       </div>
-      <ReviewList items={sortedItem} onDelete={handleDelete} />
+      <ReviewList
+        items={sortedItem}
+        onUpdate={handleUpdate}
+        onDelete={handleDelete}
+      />
     </>
   );
 }
