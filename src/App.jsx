@@ -1,19 +1,25 @@
 import { useState } from "react";
 import ReviewList from "./components/ReviewList";
-import mockData from "./mock.json";
 import Modal from "./components/Modal";
 import ReviewForm from "./components/ReviewForm";
 import Button from "./components/Button";
 import Layout from "./components/Layout";
 import styles from "./App.module.css";
 import useTranslate from "./hooks/useTranslate";
+import axios from "./utils/axios";
 
 function App() {
-  const [items, setItem] = useState(mockData);
+  const [items, setItem] = useState([]);
   const [order, setOrder] = useState("createdAt");
   const [isCreateReviewOpen, setIsCreateReviewOpen] = useState(false);
   const t = useTranslate();
   const sortedItem = items.sort((a, b) => b[order] - a[order]);
+
+  const handleLoad = async () => {
+    const response = await axios.get("/film-reviews");
+    const { reviews } = response.data;
+    setItem(reviews);
+  };
 
   const handleDelete = (id) => {
     const nextItems = items.filter((item) => item.id !== id);
@@ -81,6 +87,7 @@ function App() {
         onUpdate={handleUpdate}
         onDelete={handleDelete}
       />
+      <button onClick={handleLoad}>불러오기</button>
     </Layout>
   );
 }
