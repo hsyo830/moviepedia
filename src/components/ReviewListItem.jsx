@@ -1,16 +1,18 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Modal from "./Modal";
 import ReviewForm from "./ReviewForm";
 import Button from "./Button";
 import placeholderImage from "../assets/placeholder.png";
 import formatDate from "../utils/formatDate";
-import LocaleContext from "../contexts/LocaleContext";
 import styles from "./ReviewListItem.module.css";
+import useTranslate from "../hooks/useTranslate";
+
 const STARS = "★★★★★";
 
 function ReviewListItem({ item, onUpdate, onDelete }) {
+  const t = useTranslate();
+
   const [isEditModalOpen, setIsEditModalOpen] = useState();
-  const locale = useContext(LocaleContext);
 
   const handleEditFormSubmit = (data) => {
     onUpdate(item.id, data);
@@ -35,13 +37,13 @@ function ReviewListItem({ item, onUpdate, onDelete }) {
             variant="ghost"
             onClick={() => setIsEditModalOpen(true)}
           >
-            수정
+            {t("edit button")}
           </Button>
           <Modal
             isOpen={isEditModalOpen}
             onClose={() => setIsEditModalOpen(false)}
           >
-            <h2 className={styles.modalTitle}>리뷰 수정</h2>
+            <h2 className={styles.modalTitle}>{t("edit review title")}</h2>
             <ReviewForm review={item} onSubmit={handleEditFormSubmit} />
           </Modal>
           <Button
@@ -49,9 +51,8 @@ function ReviewListItem({ item, onUpdate, onDelete }) {
             variant="danger"
             onClick={() => onDelete(item.id)}
           >
-            삭제
+            {t("delete button")}
           </Button>
-          <p>현재 언어: {locale}</p>
         </div>
       </div>
     </div>

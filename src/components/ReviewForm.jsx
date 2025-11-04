@@ -5,6 +5,7 @@ import Textarea from "./Textarea";
 import Select from "./Select";
 import placeholderImage from "../assets/placeholder.png";
 import styles from "./ReviewForm.module.css";
+import useTranslate from "../hooks/useTranslate";
 
 function ReviewForm({
   review = {
@@ -15,6 +16,7 @@ function ReviewForm({
   },
   onSubmit,
 }) {
+  const t = useTranslate();
   const inputRef = useRef(null);
 
   const submit = (FormData) => {
@@ -36,7 +38,7 @@ function ReviewForm({
           <Input
             className={styles.title}
             name="title"
-            placeholder="제목을 입력하세요."
+            placeholder={t("review title placeholder")}
             ref={inputRef}
             defaultValue={review.title}
           />
@@ -51,10 +53,10 @@ function ReviewForm({
         <Textarea
           className={styles.textarea}
           name="content"
-          placeholder="내용을 입력하세요."
+          placeholder={t("review rating placeholder")}
           defaultValue={review.content}
         />
-        <Button className={styles.button}>작성완료</Button>
+        <Button className={styles.button}>{t("submit button")}</Button>
       </div>
     </form>
   );

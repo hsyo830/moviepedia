@@ -1,9 +1,14 @@
-function LocaleSelect({ value, onChange }) {
+import { useLocale, useSetLocale } from "../contexts/LocaleContext";
+
+function LocaleSelect() {
+  const locale = useLocale();
+  const setLocale = useSetLocale();
+
   return (
     <select
-      value={value}
+      value={locale}
       onChange={(e) => {
-        onChange(e.target.value);
+        setLocale(e.target.value);
       }}
     >
       <option value="ko">한국어</option>
