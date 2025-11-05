@@ -48,20 +48,17 @@ function App() {
     setIsCreateReviewOpen(false);
   };
 
-  const handleUpdate = (id, data) => {
-    const index = items.findIndex((item) => item.id === id);
-    const now = new Date();
-    const newItem = {
-      ...items[index],
-      ...data,
-      updatedAt: now.valueOf(),
-    };
-    const newItems = [
-      ...items.slice(0, index),
-      newItem,
-      ...items.slice(index + 1),
-    ];
-    setItem(newItems);
+  const handleUpdate = async (id, data) => {
+    const response = await axios.patch(`/film-reviews/${id}`, data);
+    const { reviews } = response.data;
+    setItem((prevItems) => {
+      const index = items.findIndex((item) => item.id === id);
+      return [
+        ...prevItems.slice(0, index),
+        reviews,
+        ...prevItems.slice(index + 1),
+      ];
+    });
   };
 
   useEffect(() => {
