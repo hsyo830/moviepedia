@@ -3,9 +3,9 @@ import Button from "./Button";
 import Input from "./Input";
 import Textarea from "./Textarea";
 import Select from "./Select";
-import placeholderImage from "../assets/placeholder.png";
 import styles from "./ReviewForm.module.css";
 import useTranslate from "../hooks/useTranslate";
+import FileInput from "./FileInput";
 
 function ReviewForm({
   review = {
@@ -27,7 +27,7 @@ function ReviewForm({
 
   return (
     <form className={styles.form} action={onSubmit}>
-      <img src={placeholderImage} />
+      <FileInput name="imgFile" />
       <div className={styles.content}>
         <div className={styles.titleRating}>
           <Input
