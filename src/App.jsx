@@ -41,15 +41,10 @@ function App() {
     setItem(nextItems);
   };
 
-  const handleCreate = (data) => {
-    const now = new Date();
-    const newItem = {
-      id: items.length + 1,
-      ...data,
-      createdAt: now.valueOf(),
-      updatedAt: now.valueOf(),
-    };
-    setItem([newItem, ...items]);
+  const handleCreate = async (data) => {
+    const response = await axios.post("/film-reviews", data);
+    const { reviews } = response.data;
+    setItem((prevItems) => [reviews, ...prevItems]);
     setIsCreateReviewOpen(false);
   };
 

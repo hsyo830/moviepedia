@@ -19,11 +19,6 @@ function ReviewForm({
   const t = useTranslate();
   const inputRef = useRef(null);
 
-  const submit = (FormData) => {
-    const data = Object.fromEntries(FormData.entries());
-    onSubmit(data);
-  };
-
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -31,7 +26,7 @@ function ReviewForm({
   }, []);
 
   return (
-    <form className={styles.form} action={submit}>
+    <form className={styles.form} action={onSubmit}>
       <img src={placeholderImage} />
       <div className={styles.content}>
         <div className={styles.titleRating}>
