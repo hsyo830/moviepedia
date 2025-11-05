@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReviewList from "./components/ReviewList";
 import Modal from "./components/Modal";
 import ReviewForm from "./components/ReviewForm";
@@ -13,10 +13,11 @@ function App() {
   const [order, setOrder] = useState("createdAt");
   const [isCreateReviewOpen, setIsCreateReviewOpen] = useState(false);
   const t = useTranslate();
-  const sortedItem = items.sort((a, b) => b[order] - a[order]);
 
-  const handleLoad = async () => {
-    const response = await axios.get("/film-reviews");
+  const handleLoad = async (orderParams) => {
+    const response = await axios.get("/film-reviews", {
+      params: { order: orderParams },
+    });
     const { reviews } = response.data;
     setItem(reviews);
   };
@@ -54,6 +55,10 @@ function App() {
     setItem(newItems);
   };
 
+  useEffect(() => {
+    handleLoad(order);
+  }, [order]);
+
   return (
     <Layout>
       <div className={styles.buttons}>
@@ -83,11 +88,10 @@ function App() {
         </Modal>
       </div>
       <ReviewList
-        items={sortedItem}
+        items={items}
         onUpdate={handleUpdate}
         onDelete={handleDelete}
       />
-      <button onClick={handleLoad}>불러오기</button>
     </Layout>
   );
 }
