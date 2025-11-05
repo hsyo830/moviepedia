@@ -8,18 +8,32 @@ import styles from "./App.module.css";
 import useTranslate from "./hooks/useTranslate";
 import axios from "./utils/axios";
 
+const LIMIT = 10;
+
 function App() {
   const [items, setItem] = useState([]);
   const [order, setOrder] = useState("createdAt");
   const [isCreateReviewOpen, setIsCreateReviewOpen] = useState(false);
+  const [hasNext, setHasNext] = useState(false);
+
   const t = useTranslate();
 
   const handleLoad = async (orderParams) => {
     const response = await axios.get("/film-reviews", {
-      params: { order: orderParams },
+      params: { order: orderParams, limit: LIMIT },
     });
-    const { reviews } = response.data;
+    const { reviews, paging } = response.data;
     setItem(reviews);
+    setHasNext(paging.hasNext);
+  };
+
+  const handleLoadMore = async () => {
+    const response = await axios.get("/film-reviews", {
+      params: { order, offset: items.length, limit: LIMIT },
+    });
+    const { reviews, paging } = response.data;
+    setItem((prevItems) => [...prevItems, ...reviews]);
+    setHasNext(paging.hasNext);
   };
 
   const handleDelete = (id) => {
@@ -92,6 +106,7 @@ function App() {
         onUpdate={handleUpdate}
         onDelete={handleDelete}
       />
+      {hasNext && <Button onClick={handleLoadMore}>더 불러오기</Button>}
     </Layout>
   );
 }
