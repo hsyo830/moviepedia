@@ -36,9 +36,9 @@ function App() {
     setHasNext(paging.hasNext);
   };
 
-  const handleDelete = (id) => {
-    const nextItems = items.filter((item) => item.id !== id);
-    setItem(nextItems);
+  const handleDelete = async (id) => {
+    await axios.delete(`/film-reviews/${id}`);
+    setItem((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const handleCreate = async (data) => {
