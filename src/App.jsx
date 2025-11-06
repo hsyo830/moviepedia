@@ -15,6 +15,7 @@ function App() {
   const [order, setOrder] = useState("createdAt");
   const [isCreateReviewOpen, setIsCreateReviewOpen] = useState(false);
   const [hasNext, setHasNext] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const t = useTranslate();
 
@@ -28,10 +29,24 @@ function App() {
   };
 
   const handleLoadMore = async () => {
-    const response = await axios.get("/film-reviews", {
-      params: { order, offset: items.length, limit: LIMIT },
-    });
-    const { reviews, paging } = response.data;
+    let data = null;
+    setIsLoading(true);
+    try {
+      const response = await axios.get("/film-reviews", {
+        params: {
+          order,
+          offset: items.length,
+          limit: LIMIT,
+        },
+      });
+      data = response.data;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+    if (!data) return;
+    const { reviews, paging } = data;
     setItem((prevItems) => [...prevItems, ...reviews]);
     setHasNext(paging.hasNext);
   };
@@ -98,7 +113,11 @@ function App() {
         onUpdate={handleUpdate}
         onDelete={handleDelete}
       />
-      {hasNext && <Button onClick={handleLoadMore}>더 불러오기</Button>}
+      {hasNext && (
+        <Button disabled={isLoading} onClick={handleLoadMore}>
+          더 불러오기
+        </Button>
+      )}
     </Layout>
   );
 }
