@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReviewList from "./components/ReviewList";
 import Modal from "./components/Modal";
 import ReviewForm from "./components/ReviewForm";
@@ -11,26 +11,28 @@ import axios from "./utils/axios";
 const LIMIT = 10;
 
 function App() {
-  const [items, setItem] = useState([]);
+  const [items, setItems] = useState([]);
   const [order, setOrder] = useState("createdAt");
   const [isCreateReviewOpen, setIsCreateReviewOpen] = useState(false);
   const [hasNext, setHasNext] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const t = useTranslate();
 
-  const handleLoad = async (orderParams) => {
+  const handleLoad = useCallback(async (orderParams) => {
     const response = await axios.get("/film-reviews", {
       params: { order: orderParams, limit: LIMIT },
     });
     const { reviews, paging } = response.data;
-    setItem(reviews);
+    setItems(reviews);
     setHasNext(paging.hasNext);
-  };
+  }, []);
 
   const handleLoadMore = async () => {
     let data = null;
     setIsLoading(true);
+    setError(null);
     try {
       const response = await axios.get("/film-reviews", {
         params: {
@@ -41,32 +43,32 @@ function App() {
       });
       data = response.data;
     } catch (error) {
-      console.error(error);
+      setError(error);
     } finally {
       setIsLoading(false);
     }
     if (!data) return;
     const { reviews, paging } = data;
-    setItem((prevItems) => [...prevItems, ...reviews]);
+    setItems((prevItems) => [...prevItems, ...reviews]);
     setHasNext(paging.hasNext);
   };
 
   const handleDelete = async (id) => {
     await axios.delete(`/film-reviews/${id}`);
-    setItem((prevItems) => prevItems.filter((item) => item.id !== id));
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const handleCreate = async (data) => {
     const response = await axios.post("/film-reviews", data);
     const { reviews } = response.data;
-    setItem((prevItems) => [reviews, ...prevItems]);
+    setItems((prevItems) => [reviews, ...prevItems]);
     setIsCreateReviewOpen(false);
   };
 
   const handleUpdate = async (id, data) => {
     const response = await axios.patch(`/film-reviews/${id}`, data);
     const { reviews } = response.data;
-    setItem((prevItems) => {
+    setItems((prevItems) => {
       const index = items.findIndex((item) => item.id === id);
       return [
         ...prevItems.slice(0, index),
@@ -78,7 +80,7 @@ function App() {
 
   useEffect(() => {
     handleLoad(order);
-  }, [order]);
+  }, [handleLoad, order]);
 
   return (
     <Layout>
@@ -118,6 +120,7 @@ function App() {
           더 불러오기
         </Button>
       )}
+      {error && <div>오류가 발생했습니다.</div>}
     </Layout>
   );
 }
