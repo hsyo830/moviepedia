@@ -27,7 +27,7 @@ function ReviewForm({
 
   return (
     <form className={styles.form} action={onSubmit}>
-      <FileInput name="imgFile" />
+      <FileInput name="imgFile" initialPreview={review.imgUrl} />
       <div className={styles.content}>
         <div className={styles.titleRating}>
           <Input
